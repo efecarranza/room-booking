@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0
+
 pragma solidity 0.8.11;
 
 contract Booking {
@@ -12,20 +14,23 @@ contract Booking {
     }
 
     address private owner = msg.sender;
-    string[20] public rooms = ['C01'];
-    string[24] public availableTimes = ['00'];
+    string[20] public rooms = ['C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'C07', 'C08', 'C09', 'C10',
+        'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10'
+    ];
+    string[9] public availableTimes = ['09', '10', '11', '12', '13', '14', '15', '16', '17'];
     mapping(string => BookingInfo) public bookings;
-
-    constructor() {
-
-    }
 
     function listRooms() public view returns (string[20] memory) {
         return rooms;
     }
 
+    function listTimes() public view returns (string[9] memory) {
+        return availableTimes;
+    }
+
     function bookRoom(string memory _room, string memory _timeSlot) public {
         string memory _bookingId = string(bytes.concat(bytes(_room), "-", bytes(_timeSlot)));
+        require(bookings[_bookingId].isBooked == false, "Room is already booked for this hour.");
         BookingInfo memory _booking = BookingInfo({
             userBooking: msg.sender,
             timeSlot: _timeSlot,
@@ -44,6 +49,6 @@ contract Booking {
     }
 
     function checkAvailability(string memory _bookingId) public view returns (bool) {
-        return bookings[_bookingId].isBooked;
+        return !bookings[_bookingId].isBooked;
     }
 }
