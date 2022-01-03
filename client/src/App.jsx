@@ -81,7 +81,7 @@ const App = () => {
     });
   }, [address, cokeModule]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!signer) {
       return;
     }
@@ -162,6 +162,7 @@ const App = () => {
                           address={slot.address}
                           available={slot.available}
                           requesterAddress={address}
+                          bookingContract={bookingContract}
                         />
                       </td>
                     </tr>
