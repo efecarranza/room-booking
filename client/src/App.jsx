@@ -5,6 +5,7 @@ import { UnsupportedChainIdError } from "@web3-react/core";
 import { ethers } from 'ethers';
 import "./App.css";
 import BookingContract from './contracts/Booking.json';
+import TimeSlot from './components/TimeSlot';
 
 const App = () => {
   const sdk = new ThirdwebSDK("rinkeby");
@@ -18,7 +19,7 @@ const App = () => {
 
   const cokeModule = sdk.getBundleDropModule("0xB0403DB21E82587D3E40341577bcA250C9F7bE82");
   const pepsiModule = sdk.getBundleDropModule("0x537832F32280Bb8d49fA2De874c845929b3920d2");
-  const contractAddress = "0x0c179773058301355DF42dCDb4CD65bceebcb096";
+  const contractAddress = "0x4820f9A4261aad5dC60153B3d2d53C3628E5909E";
   let bookingContract;
 
   if (signer) {
@@ -29,6 +30,27 @@ const App = () => {
     );
   }
 
+  async function getTimeData(roomId, times) {
+    const timeSlots = await times.map(async (time) => {
+      const bookingId = roomId + '-' + time;
+      const booking = await bookingContract.checkAvailability(bookingId);
+      console.log(booking);
+      return { 'available': booking[0], 'address': booking[1], 'time': time, 'roomId': roomId };
+    });
+    return timeSlots;
+  } 
+
+  async function listTimes(roomId) {
+    try {
+      const times = await bookingContract.listTimes();
+      const timeSlots = await getTimeData(roomId, times);
+      setTimeSlots(timeSlots);
+      console.log(timeSlots);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function listRooms() {
     if (!signer) {
       return;
@@ -36,7 +58,6 @@ const App = () => {
 
     try {
       const rooms = await bookingContract.listRooms();
-      console.log(rooms);
       setRooms(rooms);
     } catch (error) {
       console.log(error);
@@ -66,7 +87,6 @@ const App = () => {
     if (!signer) {
       return;
     }
-    console.log(signer);
 
     bookingContract.listRooms()
     .then((rs) => {
@@ -115,9 +135,35 @@ const App = () => {
                   return (
                     <tr key={room}>
                       <td>
-                      <button className="room-item" value={room}>
+                      <button className="room-item" value={room} onClick={() => listTimes(room)}>
                         {room}
                       </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div id="availableSlotsDiv">
+            <h2>Available Times</h2>
+            <table className="card">
+              <thead>
+                <tr>
+                  <th>Time Slot</th>
+                </tr>
+              </thead>
+              <tbody id="availabletimesTBody">
+                {timeSlots.map((slot) => {
+                  return (
+                    <tr key={slot.time}>
+                      <td>
+                        <TimeSlot
+                          roomId={slot.roomId}
+                          timeSlot={slot.time}
+                          address={slot.address}
+                          available={slot.available}
+                        />
                       </td>
                     </tr>
                   );

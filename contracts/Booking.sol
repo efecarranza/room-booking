@@ -52,7 +52,7 @@ contract Booking {
         emit CanceledBooking(msg.sender, _bookingId);
     }
 
-    function checkAvailability(string memory _bookingId) public view returns (bool) {
-        return !bookings[_bookingId].isBooked;
+    function checkAvailability(string memory _bookingId) public view returns (bool, address) {
+        return (!bookings[_bookingId].isBooked, bookings[_bookingId].userBooking);
     }
 }
