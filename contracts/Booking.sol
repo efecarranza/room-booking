@@ -13,12 +13,16 @@ contract Booking {
         bool isBooked;
     }
 
-    address private owner = msg.sender;
+    address private owner;
     string[20] public rooms = ['C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'C07', 'C08', 'C09', 'C10',
         'P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10'
     ];
     string[9] public availableTimes = ['09', '10', '11', '12', '13', '14', '15', '16', '17'];
     mapping(string => BookingInfo) public bookings;
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     function listRooms() public view returns (string[20] memory) {
         return rooms;
