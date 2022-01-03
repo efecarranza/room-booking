@@ -7,7 +7,7 @@ To use:
 
 Clone this repo locally, and set an `.env` file with the following:
 `PRIVATE_KEY=<some test wallet private key>`
-`INFURA_API_URL=<some rinkeby test URL>`
+`INFURA_API_URL=<some infura (or alchemy) rinkeby test URL>`
 
 Run: `node scripts/claim-nft.js` 
 
