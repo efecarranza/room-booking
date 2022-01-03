@@ -24,7 +24,7 @@ wanted to finish the functionality of airdropping the NFT to specified addresses
 
 Access to the site is handled by having this NFT in order to interact with the site.
 
-# Upcoming
+# Future Improvements
 
 Polish rendering of the site to avoid seeing jumps in what the user sees.
 Add event listeners to render the site after actions have been run.
