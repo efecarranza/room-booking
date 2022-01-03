@@ -7,7 +7,7 @@ const TimeSlot = (props) => {
 
 	return (
 		<button value="{props.roomId}-{props.timeSlot}" onClick={() => getData(props.roomId, props.timeSlot)} disabled={props.available}>
-			{props.timeSlot}
+			{props.timeSlot}:00
 		</button>
 	);
 };

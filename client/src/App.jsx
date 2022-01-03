@@ -31,12 +31,12 @@ const App = () => {
   }
 
   async function getTimeData(roomId, times) {
-    const timeSlots = await times.map(async (time) => {
+    const timeSlots = await Promise.all(times.map(async (time) => {
       const bookingId = roomId + '-' + time;
       const booking = await bookingContract.checkAvailability(bookingId);
       console.log(booking);
       return { 'available': booking[0], 'address': booking[1], 'time': time, 'roomId': roomId };
-    });
+    }));
     return timeSlots;
   } 
 
