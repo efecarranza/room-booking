@@ -34,7 +34,6 @@ const App = () => {
     const timeSlots = await Promise.all(times.map(async (time) => {
       const bookingId = roomId + '-' + time;
       const booking = await bookingContract.checkAvailability(bookingId);
-      console.log(booking);
       return { 'available': booking[0], 'address': booking[1], 'time': time, 'roomId': roomId };
     }));
     return timeSlots;
@@ -45,7 +44,6 @@ const App = () => {
       const times = await bookingContract.listTimes();
       const timeSlots = await getTimeData(roomId, times);
       setTimeSlots(timeSlots);
-      console.log(timeSlots);
     } catch (error) {
       console.log(error);
     }
@@ -163,6 +161,7 @@ const App = () => {
                           timeSlot={slot.time}
                           address={slot.address}
                           available={slot.available}
+                          requesterAddress={address}
                         />
                       </td>
                     </tr>

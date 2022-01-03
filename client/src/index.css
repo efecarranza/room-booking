@@ -149,3 +149,8 @@ button:disabled {
   opacity: 0.8;
   pointer-events: none;
 }
+
+.cancel-booking {
+  background-color: #D11A2A;
+  margin-left: 10px;
+}
