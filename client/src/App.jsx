@@ -10,7 +10,6 @@ import TimeSlot from './components/TimeSlot';
 const App = () => {
   const sdk = new ThirdwebSDK("rinkeby");
   const { connectWallet, address, error, provider } = useWeb3();
-  console.log("👋 Address:", address);
   const signer = provider ? provider.getSigner() : undefined;
   const [isBooking, setIsBooking] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -18,7 +17,6 @@ const App = () => {
   const [isMember, setIsMember] = useState(false);
 
   const cokeModule = sdk.getBundleDropModule("0xB0403DB21E82587D3E40341577bcA250C9F7bE82");
-  const pepsiModule = sdk.getBundleDropModule("0x537832F32280Bb8d49fA2De874c845929b3920d2");
   const contractAddress = "0x4820f9A4261aad5dC60153B3d2d53C3628E5909E";
   let bookingContract;
 
@@ -49,19 +47,6 @@ const App = () => {
     }
   }
 
-  async function listRooms() {
-    if (!signer) {
-      return;
-    }
-
-    try {
-      const rooms = await bookingContract.listRooms();
-      setRooms(rooms);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
   useEffect(() => {
     if (!address) {
       return;

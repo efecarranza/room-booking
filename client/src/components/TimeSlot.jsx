@@ -1,6 +1,4 @@
 import React from 'react';
-import { ethers } from 'ethers';
-import { useWeb3 } from "@3rdweb/hooks";
 
 const TimeSlot = (props) => {
   async function bookRoom(roomId, timeSlot) {
@@ -11,12 +9,8 @@ const TimeSlot = (props) => {
       }
    }
 
-  const contractAddress = "0x4820f9A4261aad5dC60153B3d2d53C3628E5909E";
-  const { connectWallet, address, error, provider } = useWeb3();
-
   async function cancelBooking(roomId, timeSlot) {
     const bookingId = props.roomId + "-" + props.timeSlot;
-    console.log(bookingId);
     try {
       await props.bookingContract.cancelBooking(bookingId);
     } catch (error) {
@@ -25,7 +19,7 @@ const TimeSlot = (props) => {
   }
 
   function addCancelButton(bookingId) {
-    if (props.available || props.address != props.requesterAddress) {
+    if (props.available || props.address !== props.requesterAddress) {
       return;
     }
 
