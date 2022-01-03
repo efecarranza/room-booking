@@ -2,7 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useWeb3 } from "@3rdweb/hooks";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import { UnsupportedChainIdError } from "@web3-react/core";
+import { ethers } from 'ethers';
 import "./App.css";
+import BookingContract from './contracts/Booking.json';
 
 const App = () => {
   const sdk = new ThirdwebSDK("rinkeby");
@@ -16,7 +18,31 @@ const App = () => {
 
   const cokeModule = sdk.getBundleDropModule("0xB0403DB21E82587D3E40341577bcA250C9F7bE82");
   const pepsiModule = sdk.getBundleDropModule("0x537832F32280Bb8d49fA2De874c845929b3920d2");
+  const contractAddress = "0x0c179773058301355DF42dCDb4CD65bceebcb096";
+  let bookingContract;
 
+  if (signer) {
+    bookingContract = new ethers.Contract(
+      contractAddress,
+      BookingContract.abi,
+      signer
+    );
+  }
+
+  async function listRooms() {
+    if (!signer) {
+      return;
+    }
+
+    try {
+      const rooms = await bookingContract.listRooms();
+      console.log(rooms);
+      setRooms(rooms);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   useEffect(() => {
     if (!address) {
       return;
@@ -34,7 +60,19 @@ const App = () => {
     .catch((error) => {
       setIsMember(false);
     });
-  }, [address]);
+  }, [address, cokeModule]);
+
+  useEffect(() => {
+    if (!signer) {
+      return;
+    }
+    console.log(signer);
+
+    bookingContract.listRooms()
+    .then((rs) => {
+      setRooms(rs);
+    });
+  }, [provider]);
 
   if (error instanceof UnsupportedChainIdError ) {
     return (
@@ -75,8 +113,12 @@ const App = () => {
               <tbody>
                 {rooms.map((room) => {
                   return (
-                    <tr key={room.address}>
-                      <td>{room}</td>
+                    <tr key={room}>
+                      <td>
+                      <button className="room-item" value={room}>
+                        {room}
+                      </button>
+                      </td>
                     </tr>
                   );
                 })}

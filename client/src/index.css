@@ -23,6 +23,15 @@ h1 {
   }
 }
 
+.room-item {
+  border: 1px solid black;
+  margin: 4px;
+  border-radius: 1rem;
+  color: #fff;
+  background-color: #000;
+  font-weight: bold;
+}
+
 .unsupported-network {
   width: 340px;
   max-width: 100%;
